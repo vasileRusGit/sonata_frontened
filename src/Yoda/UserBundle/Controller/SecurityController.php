@@ -23,6 +23,8 @@ class SecurityController extends Controller {
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
+//        $this->redirectToRoute('event_index_user');
+
         return $this->render('UserBundle:Security:login.html.twig', array(
                     'last_username' => $lastUsername,
                     'error' => $error,
@@ -35,7 +37,7 @@ class SecurityController extends Controller {
     public function loginCheckAction() {
         // empty
     }
-    
+
     /**
      * @Route("/logout", name="logout")
      */

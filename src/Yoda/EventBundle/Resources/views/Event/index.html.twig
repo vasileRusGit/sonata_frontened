@@ -1,21 +1,27 @@
 {% extends 'EventBundle::layout.html.twig' %}
 
-{% block body %}
 
-    <section class="events">
+{% block header %}
+    <div class="container">
         <header id="menu">
-            <a class="button" href="{{ path('event_new') }}">Create new event</a>
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <a class="link" href="{{ path('logout')}}">Logout</a>
+                <a class="btn btn-danger" id="logout_button" href="{{ path('logout') }}">Logout</a>
+                {#<a class="btn btn-success" id="register" href="{{ path('register') }}">Register</a>#}
             {% else %}
-                <a class="link" href="{{ path('login_form')}}">Login</a>
+                <a class="btn btn-primary" href="{{ path('login_form') }}">Login</a>
             {% endif %}
         </header>
+    </div>
+{% endblock %}
 
+
+{% block body %}
+    <section class="events">
+        <a class="btn btn-primary" style="margin-bottom: 20px;" href="{{ path('event_new') }}">Create new event</a>
         {% for entity in entities %}
             <article>
                 <header class="map-container">
-                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ entity.location | url_encode }}&markers=color:red%7Ccolor:red%7C{{ entity.location | url_encode }}&zoom=14&size=150x150&maptype=roadmap&sensor=false" />
+                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ entity.location | url_encode }}&markers=color:red%7Ccolor:red%7C{{ entity.location | url_encode }}&zoom=14&size=150x150&maptype=roadmap&sensor=false"/>
                 </header>
                 <section>
                     <h3>
