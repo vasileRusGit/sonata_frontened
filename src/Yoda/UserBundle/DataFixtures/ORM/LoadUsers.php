@@ -4,26 +4,45 @@ namespace Yoda\EventBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Yoda\EventBundle\Entity\Event;
+use Yoda\UserBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadEventa implements FixtureInterface
+class LoadUsers implements FixtureInterface, ContainerAwareInterface
 {
+    /**
+     *
+     * @var ContainerInterface
+     */
+    private $container;
+    
     public function load(ObjectManager $manager)
     {
-        $event1 = new Event();
-        $event1->setName('Fixture1');
-        $event1->setLocation('Los Angeles');
-        $event1->setTime(new \DateTime('tomorrow noon'));
-        $event1->setDetails('This is the first fixture');
-        $manager->persist($event1);
+        $user = new User();
+        $user->setUsername('user');
+        $user->setEmail('user@user.com');
+        $user->setPassword($this->encodePassword($user, '12345'));
+        $manager->persist($user);
         
-        $event2 = new Event();
-        $event2->setName('Fixture2');
-        $event2->setLocation('New York');
-        $event2->setTime(new \DateTime('tomorrow noon'));
-        $event2->setDetails('This is the first fixture');
-        $manager->persist($event2);
+        $admin = new User();
+        $admin->setUsername('admin');
+        $admin->setEmail('admin@admin.com');
+        $admin->setPassword($this->encodePassword($admin, '12345'));
+        $admin->setRoles(array('ROLE_ADMIN'));
+//        $admin->setIsActive(false);
+        $manager->persist($admin);
         
         $manager->flush();
     }
+    
+    public function encodePassword(User $user, $plainpasseord){
+        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+        
+        return $encoder->encodePassword($plainpasseord, $user->getSalt());
+    }
+
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+        $this->container = $container;
+    }
+
 }

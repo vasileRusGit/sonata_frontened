@@ -1,0 +1,39 @@
+
+{% extends "base.html.twig" %}
+
+
+{% block stylesheet %}
+    <link href="{{ asset('bundles/user/css/custom_login.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+    <div class="form" style="margin-top: 50px;">
+
+        <div class="thumbnail"><img src="{{ asset('bundles/user/img/login_image.png') }}"/></div>
+
+        {# error message#}
+        {% if error %}
+            <div class="error-message">{{error.message|trans}}</div>
+        {%endif%}
+
+        <form method="POST" action="{{ path('login_login_signup') }}">
+            {% if error is defined %}
+                <input type="text" id="username" name="username" placeholder="name" required value="{{user}}"/>
+                <input type="email" id="email" name="email" placeholder="email address" required value="{{email}}"/>
+            {%else%}
+                <input type="text" id="username" name="username" placeholder="name" required/>
+                <input type="email" id="email" name="email" placeholder="email address" required"/>
+                {%endif%}
+                <input type="password" id="password" name="password" placeholder="password" required/>
+            <input type="password" id="password" name="repeat_password" placeholder="repeat password" required/>
+            <button type="submit">create</button>
+            <p class="message">Already registered? <a href="{{ path('login_form') }}">Sign In</a></p>
+        </form>
+    </div>
+{% endblock %}
+
+
+{% block javascript %}
+    <script src="{{ asset('bundles/user/js/login.js') }}"></script>
+{% endblock %}

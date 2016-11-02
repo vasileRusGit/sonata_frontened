@@ -35,6 +35,8 @@ class EventController extends Controller {
      *
      */
     public function newAction(Request $request) {
+        $this->enforceUserSecurity();
+        
         $event = new Event();
         $form = $this->createForm('Yoda\EventBundle\Form\EventType', $event);
         $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-primary', 'style' => 'float:right')));
@@ -79,6 +81,8 @@ class EventController extends Controller {
      *
      */
     public function editAction($id) {
+        $this->enforceUserSecurity();
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('EventBundle:Event')->find($id);
@@ -102,6 +106,8 @@ class EventController extends Controller {
      *
      */
     public function updateAction(Request $request, $id) {
+        $this->enforceUserSecurity();
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('EventBundle:Event')->find($id);
@@ -132,6 +138,8 @@ class EventController extends Controller {
      *
      */
     public function deleteAction(Request $request, $id) {
+        $this->enforceUserSecurity();
+        
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -182,6 +190,13 @@ class EventController extends Controller {
                         ->setMethod('DELETE')
                         ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-danger', 'style' => 'float:right')))
                         ->getForm();
+    }
+
+    private function enforceUserSecurity() {
+        $securityContext = $this->get('security.context');
+        if (!$securityContext->isGranted('ROLE_USER')) {
+            throw $this->createAccessDeniedException("Need ROLE_USER");
+        }
     }
 
 }
