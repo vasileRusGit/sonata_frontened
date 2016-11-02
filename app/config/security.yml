@@ -1,0 +1,37 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+
+    encoders:
+        Yoda\UserBundle\Entity\User: bcrypt
+
+
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        our_database_users:
+            entity: { class: UserBundle:User }
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+
+        secured_area:
+            pattern: ^/
+            form_login:
+                check_path: login_check
+                login_path: login_form
+            logout:
+                path:   logout       #route name
+                target: /            #route for homepage
+                
+            anonymous: ~
+            # activate different ways to authenticate
+
+            # http_basic: ~
+            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: ~
+            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+            
+    access_control:
+#        - { path: ^/new, roles: ROLE_USER }
+#        - { path: ^/create, roles: ROLE_USER }
