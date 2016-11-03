@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Yoda\EventBundle\Entity\Event;
 use Yoda\EventBundle\Form\EventType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
@@ -60,11 +59,14 @@ class EventController extends Controller
         $form = $this->createForm('Yoda\EventBundle\Form\EventType', $event);
         $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-primary', 'style' => 'float:right')));
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+//            $event->upload();
+            
             $em->persist($event);
-            $em->flush($event);
+            $em->flush();
 
             return $this->redirectToRoute('event_show', array('id' => $event->getId()));
         }
