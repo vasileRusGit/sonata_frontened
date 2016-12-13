@@ -18,6 +18,8 @@ class AppKernel extends Kernel
             new Yoda\EventBundle\EventBundle(),
             new \Yoda\UserBundle\UserBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

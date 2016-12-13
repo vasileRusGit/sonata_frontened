@@ -1,39 +1,48 @@
 {% extends 'EventBundle::layout.html.twig' %}
 
+
+{% block stylesheets %}
+    <!--glyphicons-->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/header.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/event.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/events.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/main.css') }}"/>
+{% endblock %}
+
+
 {% block body %}
-
-    <section class="event-show">
-        <header id="menu">
-            <a class="link" href="{{ path('event_index_user') }}">&larr; back to the events list</a>
-        </header>
-
+    <section class="event-show" style="margin-top: 120px;">
         <article>
             <header class="map-container">
-                <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ entity.location | url_encode }}&markers=color:red%7Ccolor:red%7C{{ entity.location | url_encode }}&zoom=14&size=300x300&maptype=roadmap&sensor=false"/>
+                <img src="{{ asset('uploads/covers/' ~entity.cover) }}"/>
             </header>
+
             <section>
-                <h1>
-                    {{ entity.name }}
-
-                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <a class="btn btn-info" style="float: right;"
-                           href="{{ path('event_edit', {'id': entity.id}) }}">edit</a>
+                <header id="menu-link" style="margin-right: 200px;">
+                    {% if app.user %}
+                        <a class="link" href="{{ path('event_index') }}">&larr; back to the events list</a>
+                    {% else %}
+                        <a class="link" href="{{ path('event_index_user') }}">&larr; back to the events list</a>
                     {% endif %}
+                </header>
 
+                <h1>
+                    {{ entity.productName }}
+                    {% if app.user %}
+                        <a class="btn btn-info" style="float: right;" href="{{ path('event_edit', {'id': entity.id}) }}">edit</a>
+                    {% endif %}
                 </h1>
 
                 <dl>
                     <dt>where:</dt>
-                    <dd>{{ entity.location }}</dd>
+                    <dd>{{ entity.carMark }}</dd>
 
                     <dt>when:</dt>
-                    <dd>{{ entity.time | date('g:ia / l M j, Y') }}</dd>
+                    <dd>{{ entity.carModel }}</dd>
 
                     <dt>what:</dt>
                     <dd>{{ entity.details }}</dd>
-                    
-                    <dt>image:</dt>
-{#                    <dd><img src="{{asset('uploads/documents/'~entity.id~'.'~entity.path)}}"></dd>#}
 
                     <dt>who:</dt>
                     <dd>
@@ -45,4 +54,16 @@
             </section>
         </article>
     </section>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
+            integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap 4 Alpha JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"
+            integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU"
+            crossorigin="anonymous"></script>
 {% endblock %}

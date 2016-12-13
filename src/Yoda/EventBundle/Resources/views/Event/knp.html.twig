@@ -1,0 +1,71 @@
+{% extends 'EventBundle::layout.html.twig' %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/header.css') }}"/>
+{% endblock %}
+
+
+{% block header %}
+
+    <header id="header" headroom role="banner" tolerance="5" offset="700" class="navbar navbar-fixed-top navbar--white"
+            xmlns="http://www.w3.org/1999/html">
+        <nav role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle header-nav__button" data-toggle="collapse"
+                        data-target=".navbar-main">
+                    <span class="icon-bar header-nav__button-line"></span>
+                    <span class="icon-bar header-nav__button-line"></span>
+                    <span class="icon-bar header-nav__button-line"></span>
+                </button>
+                <div class="header-nav__logo">
+                    <a class="header__logo" href="/">Coffee</a>
+                </div>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-main navbar-right">
+                <ul class="nav navbar-nav header-nav__navigation">
+                    <li class="header-nav__navigation-item">
+                        <a href="/" class="header-nav__navigation-link">
+                            Home
+                        </a>
+                    </li>
+                    <li class="header-nav__navigation-item">
+                        <a href="../Coffee.php" class="header-nav__navigation-link ">
+                            Coffee
+                        </a>
+                    </li>
+                    <li class="header-nav__navigation-item">
+                        <a href="#" class="header-nav__navigation-link ">
+                            Shop
+                        </a>
+                    </li>
+                    <li class="header-nav__navigation-item">
+                        <a href="{{ path('event_index') }}" class="header-nav__navigation-link">
+                            Management
+                        </a>
+                    </li>
+                    {% if app.user %}
+                        <li class="header-nav__navigation-item">
+                            <div class="dropdown" id="menus">
+                                <a href="#"  data-toggle="dropdown" style="margin-right: 10px; margin-top: 10px;" class="pull-right">
+                                    <img src="{{ asset('bundles/event/images/gravatar.png') }}"/>
+                                </a>
+                                <ul class="dropdown-menu pull-right" role="menu" id="gravatar_menu">
+                                    <div id="username_gravatar" >
+                                        {{ app.user.username }}
+                                    </div>
+                                    <div class="gravatar_list">
+                                        <li><a id="edit_user" href="{{ path('user_edit', {'id': app.user.id }) }}"><span class="glyphicon glyphicon-edit"></span> Edit Account</a></li>
+                                        <li><a id="register" href="{{ path('user_register') }}"><span class="glyphicon glyphicon-registration-mark"></span> Register New User</a></li>
+                                        <li><a id="logout" href="{{ path('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                                    </div>
+                                </ul>
+                            </div>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+{% endblock %}

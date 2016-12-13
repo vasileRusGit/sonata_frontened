@@ -1,11 +1,25 @@
 {% extends 'EventBundle::layout.html.twig' %}
 
+
+{% block stylesheets %}
+    <!--glyphicons-->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/header.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/event.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/events.css') }}"/>
+    <link href="{{ asset('bundles/event/css/form.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/main.css') }}"/>
+{% endblock %}
+
+
 {% block body %}
-    <section class="event-show event-edit">
-        <header id="menu">
+    <section class="form" >
+        <header id="menu-link">
             <a class="link" href="{{ path('event_index') }}">&larr; back to the event list</a>
             <a class="link" href="{{ path('event_show', {'id': entity.id}) }}">show event</a>
         </header>
+
+        <h1 class="display-5">Edit event</h1>
 
         <article>
             <header class="map-container">
@@ -14,31 +28,28 @@
             <section>
                 {# the opening <form> tag #}
                 {{ form_start(edit_form) }}
-                    {{ form_errors(edit_form) }}
-                    <h1>
-                        {{ form_errors(edit_form.name) }}
-                        {{ form_widget(edit_form.name) }}
-                    </h1>
+                {{ form_errors(edit_form) }}
+                <h1>
+                    {{ form_errors(edit_form.name) }}
+                    {{ form_widget(edit_form.name) }}
+                </h1>
 
-                    <dl>
-                        <dt>where:</dt>
-                        <dd>
-                            {{ form_errors(edit_form.location) }}
-                            {{ form_widget(edit_form.location) }}
-                        </dd>
+                <dl>
+                    <dd>
+                        {{ form_errors(edit_form.mark) }}
+                        {{ form_widget(edit_form.mark) }}
+                    </dd>
 
-                        <dt>when:</dt>
-                        <dd>
-                            {{ form_errors(edit_form.time) }}
-                            {{ form_widget(edit_form.time) }}
-                        </dd>
+                    <dd>
+                        {{ form_errors(edit_form.type) }}
+                        {{ form_widget(edit_form.type) }}
+                    </dd>
 
-                        <dt>what:</dt>
-                        <dd>
-                            {{ form_errors(edit_form.details) }}
-                            {{ form_widget(edit_form.details) }}
-                        </dd>
-                    </dl>
+                    <dd>
+                        {{ form_errors(edit_form.details) }}
+                        {{ form_widget(edit_form.details) }}
+                    </dd>
+                </dl>
 
                 {# the closing </form> tag #}
                 {{ form_end(edit_form) }}
@@ -47,4 +58,16 @@
             </section>
         </article>
     </section>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
+            integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap 4 Alpha JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"
+            integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU"
+            crossorigin="anonymous"></script>
 {% endblock %}

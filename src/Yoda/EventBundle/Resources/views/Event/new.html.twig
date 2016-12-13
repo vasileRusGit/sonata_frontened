@@ -1,47 +1,59 @@
 {% extends 'EventBundle::layout.html.twig' %}
 
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!--glyphicons-->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/header.css') }}"/>
+    <link href="{{ asset('bundles/event/css/form.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.css" rel="stylesheet">
+{% endblock %}
+
+
 {% block body %}
-    <section class="event-show event-edit">
-        <header id="menu">
-            <a class="link" href="{{ path('event_index') }}">&larr; back to the event list</a>
-        </header>
+    <div class="form" style="margin-top: 100px;">
 
-        <article>
-            <header class="map-container">
-                <img src="http://maps.googleapis.com/maps/api/staticmap?center=Somewhere,%20US&zoom=15&size=300x300&maptype=roadmap&sensor=false" />
-            </header>
-            <section>
-                {# the opening <form> tag #}
-                {{ form_start(form) }}
-                    {{ form_errors(form) }}
-                    <h1>
-                        {{ form_errors(form.name) }}
-                        {{ form_widget(form.name) }}
-                    </h1>
+        {#<div class="thumbnail"><img src="{{ asset('bundles/user/img/login_image.png') }}"/></div>#}
+        <h1 class="display-5">Add new event</h1>
 
-                    <dl>
-                        <dt>where:</dt>
-                        <dd>
-                            {{ form_errors(form.location) }}
-                            {{ form_widget(form.location) }}
-                        </dd>
+        {#error message#}
+        {#{% if error %}#}
+        {#<div class="error-message">{{error.message|trans}}</div>#}
+        {#{% endif %}#}
 
-                        <dt>when:</dt>
-                        <dd>
-                            {{ form_errors(form.time) }}
-                            {{ form_widget(form.time) }}
-                        </dd>
+        <form method="POST" action="{{ path('event_new') }}" enctype="multipart/form-data" role="form">
 
-                        <dt>what:</dt>
-                        <dd>
-                            {{ form_errors(form.details) }}
-                            {{ form_widget(form.details) }}
-                        </dd>
-                    </dl>
-                        
-                {# the closing </form> tag #}
-                {{ form_end(form) }}
-            </section>
-        </article>
-    </section>
+            {{ form_errors(form) }}
+
+
+            {{ form_row(form.productName, {'attr': {'id': 'product name', 'placeholder': 'product name'}}) }}
+            {{ form_row(form.carMark, {'attr': {'id': 'car_mark', 'placeholder': 'car mark'}}) }}
+            {{ form_row(form.carModel, {'attr': {'id': 'car_model', 'placeholder': 'car model'}}) }}
+            {{ form_row(form.carYear, {'attr': {'id': 'car_year', 'placeholder': 'car year'}}) }}
+            {{ form_row(form.stock, {'attr': {'id': 'stock', 'placeholder': 'stock'}}) }}
+            {{ form_row(form.details, {'attr': {'id': 'location', 'placeholder': 'details'}}) }}
+            {{ form_row(form.files , {'attr': {'multiple': 'multiple'}}) }}
+            {{ form_row(form.submit) }}
+
+            {{ form_rest(form) }}
+
+        </form>
+
+        {#<form id="upload" class="dropzone" action=" path('event_new') }}" enctype="multipart/form-data">#}
+        {#<input type="hidden" name="file" multiple><br/>#}
+        {#</form>F#}
+
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.js"></script>
+    <script>
+        var myDropzone = new Dropzone("div#myId", {url: "/file/post"});
+        $("div#myId").dropzone({url: "/file/post"});
+
+    </script>
 {% endblock %}

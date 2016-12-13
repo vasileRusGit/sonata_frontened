@@ -1,30 +1,111 @@
 {% extends 'EventBundle::layout.html.twig' %}
 
+{% block stylesheets %}
+    <!--glyphicons-->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/bootstrap.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/events.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/main.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/filter-form.css') }}"/>
+{% endblock %}
+
 {% block body %}
+    <div class="container">
+        {#FILTER#}
+        <div class="filter-form">
+            <div class="col-sm-3">
+                <select class="selectpicker" id="car-type" title="Alege marca masini">
+                    {% for entity in entities %}
+                        <option>{{ entity.carMark }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-    <section class="events">
-        {% for entity in entities %}
-            <article>
-                <header class="map-container">
-                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ entity.location | url_encode }}&markers=color:red%7Ccolor:red%7C{{ entity.location | url_encode }}&zoom=14&size=150x150&maptype=roadmap&sensor=false" />
-                </header>
-                <section>
-                    <h3>
-                        <a href="{{ path('event_show', {'id': entity.id}) }}">{{ entity.name }}</a>
-                    </h3>
+            <div class="col-sm-3">
+                <select class="selectpicker" id="car-model" title="Alege modelul masini" data-live-search="true" disabled>
+                    {% for entity in entities %}
+                        <option>{{ entity.carModel }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                    <dl>
-                        <dt>where:</dt>
-                        <dd>{{ entity.location }}</dd>
+            <div class="col-sm-3">
+                <select class="selectpicker" id="car-year" title="Alege anul masini" data-live-search="true">
+                    {% set minYear = "now - 50 years"|date("Y") %}
+                    {% set maxYear = "now"|date("Y") %}
+                    {% for year in minYear..maxYear %}
+                        <option>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                        <dt>when:</dt>
-                        <dd>{{ entity.time | date('g:ia / l M j, Y') }}</dd>
+            <div class="col-sm-3">
+                <select class="selectpicker" id="car-year" title="Alege piesa" data-live-search="true">
+                    <option>Mustard</option>
+                    <option>Ketchup</option>
+                    <option>Relish</option>
+                </select>
+            </div>
 
-                        <dt>who:</dt>
-                        <dd>Todo # of people</dd>
-                    </dl>
-                </section>
-            </article>
-        {% endfor %}
-    </section>
+            <div class='col-sm-2 checkbox'>
+                <input name='remember' type="checkbox" id="checkbox"/>
+                <label for="checkbox">Stock</label>
+            </div>
+
+            <button id="search_button" type="submit" class="btn btn-primary">Search</button>
+        </div>
+
+
+        <div class="events">
+            {% for entity in entities %}
+                <div class="col-sm-4">
+                    <article>
+                        <header class="map-container">
+                            <img src="{{ asset('uploads/covers/' ~entity.cover) }}"/>
+                        </header>
+                        <section>
+                            <h3>
+                                <a href="{{ path('event_show', {'id': entity.id}) }}">{{ entity.productName }}</a>
+                            </h3>
+
+                            <dl>
+                                <dt>Model:</dt>
+                                <dd>{{ entity.carMark }}</dd>
+
+                                <dt>Model:</dt>
+                                <dd>{{ entity.carModel }}</dd>
+
+                                <dt>Details:</dt>
+                                <dd>{{ entity.details }}</dd>
+                            </dl>
+                        </section>
+                </div>
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
+            integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap 4 Alpha JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"
+            integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU"
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+    <script>
+        $('.selectpicker').selectpicker({
+            size: 10
+        });
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/event/js/filter.js') }}"></script>
 {% endblock %}

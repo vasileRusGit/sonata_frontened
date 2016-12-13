@@ -1,0 +1,9 @@
+#dropdown_options {
+    margin-top: 20px;
+    min-width: 100px;
+    margin-right: 20px;
+}
+.dropdown-menu:before,
+.dropdown-menu:after {
+    display:none;
+}

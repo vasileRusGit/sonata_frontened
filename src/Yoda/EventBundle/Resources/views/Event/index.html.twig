@@ -1,45 +1,78 @@
 {% extends 'EventBundle::layout.html.twig' %}
 
 
-{% block header %}
-    <div class="container">
-        <header id="menu">
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <a class="btn btn-danger" id="logout_button" href="{{ path('logout') }}">Logout</a>
-                {#<a class="btn btn-success" id="register" href="{{ path('register') }}">Register</a>#}
-            {% else %}
-                <a class="btn btn-primary" href="{{ path('login_form') }}">Login</a>
-            {% endif %}
-        </header>
-    </div>
+{% block stylesheets %}
+    <!--glyphicons-->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/header.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/event/css/bootstrap.css') }}"/>
 {% endblock %}
 
 
 {% block body %}
-    <section class="events">
-        <a class="btn btn-primary" style="margin-bottom: 20px;" href="{{ path('event_new') }}">Create new event</a>
-        {% for entity in entities %}
-            <article>
-                <header class="map-container">
-                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ entity.location | url_encode }}&markers=color:red%7Ccolor:red%7C{{ entity.location | url_encode }}&zoom=14&size=150x150&maptype=roadmap&sensor=false"/>
-                </header>
-                <section>
-                    <h3>
-                        <a href="{{ path('event_show', {'id': entity.id}) }}">{{ entity.name }}</a>
-                    </h3>
+    <div class="container" style="margin-top: 100px;">
+        <a class="btn btn-primary" style="margin-bottom: 20px; float: right;" href="{{ path('event_new') }}">Create new event</a>
+        <table class="table table-hover" id="bootstrap-table">
+            <thead class="table-inverse">
+            <tr>
+                <th width="40">ID</th>
+                <th>Product Name</th>
+                <th>Car Type</th>
+                <th>Car Model</th>
+                <th>Car Year</th>
+                <th>Image</th>
+                <th>Stock</th>
+                <th width='40px'>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.id }}</td>
 
-                    <dl>
-                        <dt>where:</dt>
-                        <dd>{{ entity.location }}</dd>
+                    <td><a href="{{ path('event_show', {'id': entity.id}) }}">{{ entity.productName }}</a></td>
 
-                        <dt>when:</dt>
-                        <dd>{{ entity.time | date('g:ia / l M j, Y') }}</dd>
+                    <td>{{ entity.carMark }}</td>
 
-                        <dt>who:</dt>
-                        <dd>Todo # of people</dd>
-                    </dl>
-                </section>
-            </article>
-        {% endfor %}
-    </section>
+                    <td>{{ entity.carModel }}</td>
+
+                    <td>{{ entity.carYear }}</td>
+
+                    <td>{{ entity.cover }}</td>
+
+                    <td>{{ entity.stock }}</td>
+
+                    <td>
+                        <div class="dropdown">
+                            <a href="#" data-toggle="dropdown" style="margin-right: 10px;" class="dropdown-toggle pull-right">
+                                <span class="glyphicon glyphicon-cog"></span>
+                            </a>
+                            <ul class="dropdown-menu pull-right" role="menu" id="dropdown_options">
+                                <li><a href='#'><span class="glyphicon glyphicon-edit"></span> &nbsp;&nbsp; Edit</a></li>
+                                <li><a href='#'><span class="glyphicon glyphicon-remove"></span> &nbsp;&nbsp; Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
+            integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap 4 Alpha JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"
+            integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU"
+            crossorigin="anonymous"></script>
+
+    <script href="{{ asset('bundles/event/js/datatable.js') }}"></script>
+    <script href="{{ asset('bundles/event/js/jquery.bdt.js') }}"></script>
+    <script href="{{ asset('bundles/event/js/jquery.sortelements.js') }}"></script>
 {% endblock %}

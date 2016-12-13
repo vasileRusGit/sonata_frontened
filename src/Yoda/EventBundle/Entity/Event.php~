@@ -3,15 +3,19 @@
 namespace Yoda\EventBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Event
  *
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="event")
  * @ORM\Entity(repositoryClass="Yoda\EventBundle\Repository\EventRepository")
  */
 class Event
 {
+
     /**
      * @var int
      *
@@ -29,33 +33,143 @@ class Event
     private $name;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="time", type="datetime")
+     * @ORM\Column(name="mark", type="string", length=255)
      */
-    private $time;
+    private $mark;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="location", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255)
      */
-    private $location;
+    private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="details", type="text")
+     * @ORM\Column(name="details", type="string", length=255)
      */
     private $details;
 
-
+    //////////////////////////////////////
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
     private $files;
-    
+
+    /**
+     *
+     * @ORM\Column(name="cover", type="string")
+     */
+    private $cover;
+
+
+    /**
+     * @param string $cover
+     */
+    public function setCover($cover)
+    {
+        $this->cover = $cover;
+    }
+
+    /**
+     * Get Cover
+     * @return string
+     */
+    public function getCover()
+    {
+        return $this->cover;
+    }
+
+    /**
+     * Sets Files
+     * @param UploadedFile $files
+     */
+    public function setFiles(UploadedFile $files = null)
+    {
+        $this->files = $files;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+
+    /**
+     * Get web path to upload directory
+     *
+     * @return string
+     */
+    protected function getUploadPath()
+    {
+        return 'uploads/covers';
+    }
+
+    /**
+     * Get absolute path to upload directory
+     *
+     * @return string
+     */
+    protected function getUploadAbsolutePath()
+    {
+        return __DIR__ . '/../../../../web/' . $this->getUploadPath();
+    }
+
+    /**
+     * Get path to a cover
+     *
+     * @return null|string
+     */
+    public function getCoverWeb()
+    {
+        return NULL === $this->getCover() ? NULL : $this->getUploadPath() . '/' . $this->getCover();
+    }
+
+    /**
+     * Get path on disk to a cover
+     *
+     * @return null|string
+     */
+    public function getCoverAbsolute()
+    {
+        return NULL === $this->getCover() ? NULL : $this->getUploadAbsolutePath() . '/' . $this->getCover();
+    }
+
+    /**
+     * Upload a cover File
+     */
+    public function upload()
+    {
+        if (null === $this->getFiles()) {
+            return;
+        }
+
+        $filename = $this->getFiles()->getClientOriginalName();
+
+        // move the uploaded file to target directory using original name
+        $this->getFiles()->move($this->getUploadAbsolutePath(), $filename);
+
+        // set the cover
+        $this->setCover($filename);
+
+        // cleanup
+        $this->setFiles();
+        return 'Done';
+    }
+    //////////////////////////////////////
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -78,57 +192,11 @@ class Event
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set time
-     *
-     * @param \DateTime $time
-     * @return Event
-     */
-    public function setTime($time)
-    {
-        $this->time = $time;
-
-        return $this;
-    }
-
-    /**
-     * Get time
-     *
-     * @return \DateTime 
-     */
-    public function getTime()
-    {
-        return $this->time;
-    }
-
-    /**
-     * Set location
-     *
-     * @param string $location
-     * @return Event
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return string 
-     */
-    public function getLocation()
-    {
-        return $this->location;
     }
 
     /**
@@ -147,31 +215,43 @@ class Event
     /**
      * Get details
      *
-     * @return string 
+     * @return string
      */
     public function getDetails()
     {
         return $this->details;
     }
-    
-        /**
-     * Set files
-     *
-     * @param string $files
-     * @return Event
+
+    /**
+     * @return string
      */
-    public function setFiles($files)
+    public function getMark()
     {
-        $this->files = $files;
+        return $this->mark;
     }
 
     /**
-     * Get name
-     *
-     * @return string 
+     * @param string $mark
      */
-    public function getFiles()
+    public function setMark($mark)
     {
-        return $this->files;
+        $this->mark = $mark;
     }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
 }

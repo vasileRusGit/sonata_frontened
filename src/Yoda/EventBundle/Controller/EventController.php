@@ -32,10 +32,6 @@ class EventController extends Controller
         ));
     }
 
-    /**
-     * Lists all Event entities.
-     * @Route("/event", name="event_index_user")
-     */
     public function index_userAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -49,32 +45,44 @@ class EventController extends Controller
 
     /**
      * Creates a new event entity.
-     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request)
     {
         $this->enforceUserSecurity();
 
-        $event = new Event();
-        $form = $this->createForm('Yoda\EventBundle\Form\EventType', $event);
-        $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-primary', 'style' => 'float:right')));
+        $entity = new Event();
+        $form = $this->createForm('Yoda\EventBundle\Form\EventType', $entity);
+//        $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-primary', 'style' => 'float:right')));
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $entity->upload();
+
             $em = $this->getDoctrine()->getManager();
-            
-//            $event->upload();
-            
-            $em->persist($event);
+
+            $em->persist($entity);
             $em->flush();
 
-            return $this->redirectToRoute('event_show', array('id' => $event->getId()));
+            return $this->redirectToRoute('event_show', array('id' => $entity->getId()));
         }
 
         return $this->render('EventBundle:Event:new.html.twig', array(
-            'event' => $event,
+            'event' => $entity,
             'form' => $form->createView(),
         ));
+    }
+
+    public function addPhoto(Request $request)
+    {
+        $file = $request->files('file');
+
+        $filename = time() . $file->getClientOriginalName();
+
+        $file->move('images', $filename);
+
+        return 'Done';
     }
 
     private function enforceUserSecurity()
@@ -87,7 +95,8 @@ class EventController extends Controller
 
     /**
      * Finds and displays a Event entity.
-     *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction($id)
     {
@@ -108,7 +117,8 @@ class EventController extends Controller
 
     /**
      * Displays a form to edit an existing Event entity.
-     *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction($id)
     {
@@ -171,7 +181,9 @@ class EventController extends Controller
 
     /**
      * Edits an existing Event entity.
-     *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function updateAction(Request $request, $id)
     {
@@ -190,6 +202,7 @@ class EventController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $entity->upload();
             $em->flush();
 
             return $this->redirect($this->generateUrl('event_show', array('id' => $id)));
@@ -204,7 +217,9 @@ class EventController extends Controller
 
     /**
      * Deletes a Event entity.
-     *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, $id)
     {

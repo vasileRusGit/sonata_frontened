@@ -12,4 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventRepository extends EntityRepository
 {
+    public function findCarModel(){
+        return $this->getEntityManager()->createQuery('SELECT mark FROM EventBundle:Event event')->getResult();
+    }
 }

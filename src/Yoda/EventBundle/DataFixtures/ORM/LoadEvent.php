@@ -12,15 +12,15 @@ class LoadEventa implements FixtureInterface
     {
         $event1 = new Event();
         $event1->setName('Fixture1');
-        $event1->setLocation('Los Angeles');
-        $event1->setTime(new \DateTime('tomorrow noon'));
+        $event1->setMark('BMW');
+        $event1->setType('motor');
         $event1->setDetails('This is the first fixture');
         $manager->persist($event1);
         
         $event2 = new Event();
         $event2->setName('Fixture2');
-        $event2->setLocation('New York');
-        $event2->setTime(new \DateTime('tomorrow noon'));
+        $event2->setMark('AUDI');
+        $event2->setType('Bord');
         $event2->setDetails('This is the first fixture');
         $manager->persist($event2);
         

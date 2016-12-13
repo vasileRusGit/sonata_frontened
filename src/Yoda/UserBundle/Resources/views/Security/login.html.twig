@@ -3,20 +3,25 @@
 
 
 {% block stylesheets %}
+    {{ parent() }}
+    <!--glyphicons-->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+
     <link href="{{ asset('bundles/user/css/custom_login.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/event/css/header.css') }}" rel="stylesheet">
 {% endblock %}
 
 
 {% block body %}
-    <div class="form" style="margin-top: 50px;">
+    <div class="form" style="margin-top: 100px;">
 
         <div class="thumbnail"><img src="{{ asset('bundles/user/img/login_image.png') }}"/></div>
         <form class="login-form" action="{{ path('login_check') }}" method="post">
 
 {#            error message#}
-            {% if error %}
-                <div class="error-message">{{error.message|trans}}</div>
-            {%endif%}
+            {#{% if error %}#}
+                {#<div class="error-message">{{error.message|trans}}</div>#}
+            {#{%endif%}#}
 
             <input type="text" id='username' name="_username" placeholder="username" required/>
             <input type="password" id='password' name="_password" placeholder="password" required/>
@@ -30,6 +35,6 @@
 {% endblock %}
 
 
-{% block javascript %}
+{% block javascripts %}
     <script src="{{ asset('bundles/user/js/login.js') }}"></script>
 {% endblock %}
